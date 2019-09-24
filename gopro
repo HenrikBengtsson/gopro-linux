@@ -224,7 +224,7 @@ function convert() {
 }
 
 function convert-h265-to-h264 {
-        fileout="$(get-output-filename ${1} h264)"
+        fileout="$(get-output-filename "${1}" h264)"
         ffmpeg -i "$1" -bsf:v h264_mp4toannexb -vcodec libx264 -c:a copy "$fileout"
 }
 
@@ -244,13 +244,13 @@ function trim() {
 
 function merge() {
 	LIST_FILE="$(mktemp)"
-	printf "file '$PWD/%s'\n" *.MP4 > $LIST_FILE
-	ffmpeg -f concat -safe 0 -i $LIST_FILE -c copy "$1"
-	rm $LIST_FILE
+	printf "file '$PWD/%s'\n" "*.MP4" > "$LIST_FILE"
+	ffmpeg -f concat -safe 0 -i "$LIST_FILE" -c copy "$1"
+	rm "$LIST_FILE"
 }
 
 function rotate90deg {
-	fileout="$(get-output-filename ${1} rotated)"
+	fileout="$(get-output-filename "${1}" rotated)"
         # use 'transpose=2' for counter-clockwise
         ffmpeg -i "$1" -filter:v transpose=1 -metadata:s:v rotate="" "$fileout"
 }
